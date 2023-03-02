@@ -47,7 +47,7 @@ const movieSlice = createSlice({
             if (state.favoriteMovies.filter(m => m.id === movieId).length > 0) {
                 const movies = state.favoriteMovies.filter(m => m.id !== movieId)
                 state.popularMovies.map(m => {
-                    if (m => m.id === movieId) m.isFavorite = false
+                    if (m.id === movieId) m.isFavorite = false
                     return m
                 })
                 state.favoriteMovies = movies

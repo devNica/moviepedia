@@ -20,15 +20,41 @@
   position: absolute;
   margin-left: -3rem;
   margin-top: 0.8rem;
-  background-color: rgb(37, 37, 37);
   cursor: pointer;
 }
+
+.btn-fav-inactive {
+  background-color: rgb(37, 37, 37);
+}
+
+.btn-fav-active{
+  background-color: rgb(227, 37, 37);
+}
+
 
 .btn-icon {
   color: rgb(233, 231, 231);
   font-size: 1.2rem;
 }
 
-.btn-favorite:hover .btn-icon{
+
+.btn-fav-active:hover .btn-icon{
+  color: rgb(37, 37, 37);
+  animation: rotateHeart 1.5s alternate infinite;
+}
+
+.btn-fav-inactive:hover .btn-icon{
   color: rgb(227, 37, 37);
+}
+
+
+@keyframes rotateHeart {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+  
 }
