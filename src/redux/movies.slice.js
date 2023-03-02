@@ -5,6 +5,7 @@ const { fetchPopulaMovies } = api
 
 const initialState = {
     popularMovies: [],
+    favoriteMovies: [],
     page: 1,
     totalResults: 0,
     totalPages: 0,
@@ -26,6 +27,7 @@ const movieSlice = createSlice({
                 error: null
             }
         },
+
         fetchMoviesSuccess(state, action) {
             return {
                 ...state,
@@ -38,6 +40,16 @@ const movieSlice = createSlice({
                 error: null
             }
         },
+        setMovieFavorite(state,action){
+            const movieId = action.payload
+            state.popularMovies.map(m=>{
+                if(m.id === movieId) m.isFavorite = !m.isFavorite
+                return m
+            })
+
+            state.favoriteMovies = [...state.popularMovies.filter(m=>m.isFavorite===true)]
+        },
+
         setError(state,action) {
             return {
                 ...state,
@@ -60,6 +72,12 @@ export const fetchPopularMovies = (pageNumber=1) => {
 
             if(Array.isArray(results)) {
                movies = results.sort((a, b)=> b.vote_average - a.vote_average)
+               movies = movies.map(m=>{
+                return {
+                    ...m,
+                    isFavorite: false
+                }
+               })
             }
 
             const payload = {
@@ -78,6 +96,6 @@ export const fetchPopularMovies = (pageNumber=1) => {
     }
 }
 
-const { fetchMoviesSuccess, fetchMoviesStart, setError } = movieSlice.actions
+export const { fetchMoviesSuccess, fetchMoviesStart, setError, setMovieFavorite } = movieSlice.actions
 
 export default movieSlice.reducer
