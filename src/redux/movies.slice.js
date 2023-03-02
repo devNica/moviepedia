@@ -16,14 +16,14 @@ const initialState = {
 
 const movieSlice = createSlice({
     name: "movies",
-    
+
     initialState,
-    
+
     reducers: {
-        fetchMoviesStart(state){
+        fetchMoviesStart(state) {
             return {
                 ...state,
-                isLoading: true, 
+                isLoading: true,
                 error: null
             }
         },
@@ -40,17 +40,26 @@ const movieSlice = createSlice({
                 error: null
             }
         },
-        setMovieFavorite(state,action){
+        setMovieFavorite(state, action) {
             const movieId = action.payload
-            state.popularMovies.map(m=>{
-                if(m.id === movieId) m.isFavorite = !m.isFavorite
-                return m
-            })
 
-            state.favoriteMovies = [...state.popularMovies.filter(m=>m.isFavorite===true)]
+            //buscar en lista de favoritos para removerla en caso de que ya exista
+            if (state.favoriteMovies.filter(m => m.id === movieId).length > 0) {
+                const movies = state.favoriteMovies.filter(m => m.id !== movieId)
+                state.popularMovies.map(m => {
+                    if (m => m.id === movieId) m.isFavorite = false
+                    return m
+                })
+                state.favoriteMovies = movies
+            } else {
+                //si no esta en la lista de favoritos, agregarla
+                const movie = state.popularMovies.find(m => m.id === movieId)
+                movie.isFavorite = true
+                state.favoriteMovies = [...state.favoriteMovies, movie]
+            }
         },
 
-        setError(state,action) {
+        setError(state, action) {
             return {
                 ...state,
                 isLoading: false,
@@ -60,24 +69,29 @@ const movieSlice = createSlice({
     }
 })
 
-export const fetchPopularMovies = (pageNumber=1) => {
-    return async (dispatch) => {
+export const fetchPopularMovies = (pageNumber = 1) => {
+    return async (dispatch, getState) => {
         dispatch(fetchMoviesStart())
         try {
+            const favoriteMovies = getState().movies.favoriteMovies
+
             const response = await fetchPopulaMovies(pageNumber)
 
             const { results, page, total_pages, total_results } = response.data
 
             let movies = []
 
-            if(Array.isArray(results)) {
-               movies = results.sort((a, b)=> b.vote_average - a.vote_average)
-               movies = movies.map(m=>{
-                return {
-                    ...m,
-                    isFavorite: false
-                }
-               })
+            if (Array.isArray(results)) {
+                movies = results.sort((a, b) => b.vote_average - a.vote_average)
+                movies = movies.map(m => {
+
+                    const isFavorite = favoriteMovies.some(f => f.id === m.id)
+
+                    return {
+                        ...m,
+                        isFavorite
+                    }
+                })
             }
 
             const payload = {
@@ -87,9 +101,9 @@ export const fetchPopularMovies = (pageNumber=1) => {
                 totalResults: total_results,
                 resultPerpage: Math.ceil(total_results / total_pages),
             }
-            
+
             dispatch(fetchMoviesSuccess(payload))
-            
+
         } catch (error) {
             dispatch(setError(error))
         }

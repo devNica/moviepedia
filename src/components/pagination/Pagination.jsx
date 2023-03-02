@@ -4,9 +4,9 @@ const Pagination = ({totalItems, handleFunction}) => {
 
     const pages = ([...Array(totalItems).keys()].map((e,i) => i+1)).map(number=>(
         <li key={number} className="page-item" onClick={()=>handleFunction(number)}>
-            <a href="!#" className="page-link">
+            <span className="page-link">
                 {number}
-            </a>
+            </span>
         </li>
     ))
 
