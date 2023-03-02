@@ -1,4 +1,6 @@
-import { useAsyncFetchMovies, useGetMovies } from "../../hooks/useMovies.hook"
+import { useAsyncFetchMovies, useGetMovies, useGetResultPerPage } from "../../hooks/useMovies.hook"
+import { useDispatch } from 'react-redux'
+import { fetchPopularMovies } from '../../redux/movies.slice'
 import MoviePoster from "./MoviePoster"
 import Pagination from "../pagination/Pagination"
 import Spinner from '../spinner/Spinner'
@@ -8,18 +10,26 @@ const PopularMovies = () => {
 
     const { isLoading } = useAsyncFetchMovies()
     const movies = useGetMovies()
+    const resultPerPage = useGetResultPerPage()
+    const dispatch = useDispatch()
 
 
     const listMovies = movies.map((movie, index) => <MoviePoster movie={movie} key={index} />)
+
+    const handleFetchMoviePerpage = pageNumber => {
+        dispatch(fetchPopularMovies(pageNumber))
+    }
 
     return (
         <div className="popular-movies-container">
             {!isLoading ?
                 <>
+                    <h3 className="popular-movies-title">Popular Movies</h3>
+                    <hr className="separator"/>
                     <div className="movies">
                         {listMovies}
                     </div>
-                    <Pagination totalItems={10}/>
+                    <Pagination totalItems={resultPerPage} handleFunction={handleFetchMoviePerpage}/>
                 </>
                 :
                 <Spinner />

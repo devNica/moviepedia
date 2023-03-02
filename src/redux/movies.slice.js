@@ -8,7 +8,7 @@ const initialState = {
     page: 1,
     totalResults: 0,
     totalPages: 0,
-    resultPerpages: 0,
+    resultPerpage: 0,
     isLoading: true,
     error: null
 }
@@ -29,11 +29,11 @@ const movieSlice = createSlice({
         fetchMoviesSuccess(state, action) {
             return {
                 ...state,
-                popularMovies: action.payload.results,
+                popularMovies: action.payload.movies,
                 page: action.payload.page,
-                totalPages: action.payload.total_pages,
-                totalResults: action.payload.total_results,
-                resultPerpages: Math.ceil(action.payload.total_results / action.payload.total_pages),
+                totalPages: action.payload.totalPages,
+                totalResults: action.payload.totalResults,
+                resultPerpage: action.payload.resultPerpage,
                 isLoading: false,
                 error: null
             }
@@ -48,13 +48,29 @@ const movieSlice = createSlice({
     }
 })
 
-export const fetchPopularMovies = () => {
+export const fetchPopularMovies = (pageNumber=1) => {
     return async (dispatch) => {
         dispatch(fetchMoviesStart())
         try {
-            const response = await fetchPopulaMovies()
+            const response = await fetchPopulaMovies(pageNumber)
 
-            dispatch(fetchMoviesSuccess(response.data))
+            const { results, page, total_pages, total_results } = response.data
+
+            let movies = []
+
+            if(Array.isArray(results)) {
+               movies = results.sort((a, b)=> b.vote_average - a.vote_average)
+            }
+
+            const payload = {
+                movies,
+                page,
+                totalPages: total_pages,
+                totalResults: total_results,
+                resultPerpage: Math.ceil(total_results / total_pages),
+            }
+            
+            dispatch(fetchMoviesSuccess(payload))
             
         } catch (error) {
             dispatch(setError(error))

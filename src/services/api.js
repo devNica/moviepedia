@@ -20,7 +20,7 @@ api.fetchMoviesByGenreId = async genreId => {
     })
 }
 
-api.fetchPopulaMovies = async (page=5) => {
+api.fetchPopulaMovies = async (page) => {
     return await axios.get(`https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${API_KEY}`, {
         headers: {
             'Content-Type': 'applications/json'

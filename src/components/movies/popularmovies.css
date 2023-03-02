@@ -16,3 +16,17 @@
     row-gap: 20px;
 
 }
+
+.popular-movies-title{
+    color: rgb(137, 140, 143);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Geneva, Tahoma, sans-serif, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, 'Arial Narrow', Arial, sans-serif, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 0.5cm;
+    text-transform: uppercase;
+}
+
+.separator{
+    width: 90%;
+    border: 2px solid rgb(137, 140, 143);
+    margin-top: 0.1rem;
+    margin-bottom: 1rem;
+}

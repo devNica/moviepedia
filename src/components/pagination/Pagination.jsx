@@ -1,9 +1,9 @@
 import './pagination.css'
 
-const Pagination = ({totalItems}) => {
+const Pagination = ({totalItems, handleFunction}) => {
 
     const pages = ([...Array(totalItems).keys()].map((e,i) => i+1)).map(number=>(
-        <li key={number} className="page-item">
+        <li key={number} className="page-item" onClick={()=>handleFunction(number)}>
             <a href="!#" className="page-link">
                 {number}
             </a>
