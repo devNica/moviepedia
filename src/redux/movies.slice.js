@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import api from '../services/api'
+import { _randomSlice } from '../utils/object-helper'
 
 const { fetchPopulaMovies } = api
 
 const initialState = {
+    randomMovies: [],
     popularMovies: [],
     favoriteMovies: [],
     page: 1,
@@ -36,6 +38,7 @@ const movieSlice = createSlice({
                 totalPages: action.payload.totalPages,
                 totalResults: action.payload.totalResults,
                 resultPerpage: action.payload.resultPerpage,
+                randomMovies: action.payload.randomMovies,
                 isLoading: false,
                 error: null
             }
@@ -94,8 +97,11 @@ export const fetchPopularMovies = (pageNumber = 1) => {
                 })
             }
 
+            const randomMovies = _randomSlice(movies, 8)
+
             const payload = {
                 movies,
+                randomMovies,
                 page,
                 totalPages: total_pages,
                 totalResults: total_results,

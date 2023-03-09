@@ -8,6 +8,8 @@ const useGetFavoriteMovies = () => useSelector(state=>state.movies.favoriteMovie
 
 const useGetResultPerPage = () => useSelector(state => state.movies.resultPerpage)
 
+const useGetRandomMovies = () => useSelector(state => state.movies.randomMovies)
+
 const useAsyncFetchMovies = () => {
 
     const dispatch = useDispatch()
@@ -29,6 +31,7 @@ const useAsyncFetchMovies = () => {
 
 export {
     useGetMovies,
+    useGetRandomMovies,
     useGetFavoriteMovies,
     useGetResultPerPage,
     useAsyncFetchMovies
